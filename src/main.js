@@ -65,16 +65,25 @@ const controls = new PointerLockControls(camera, document.body);
 const overlay = $('#overlay');
 let crash; // skapas nedan
 
-overlay.addEventListener('click', () => controls.lock());
+// Request pointer lock ourselves so a too-quick re-click after Esc doesn't throw in the console
+overlay.addEventListener('click', () => {
+  try { document.body.requestPointerLock()?.catch?.(() => {}); } catch { /* browser refused, user can click again */ }
+});
 controls.addEventListener('lock', () => overlay.classList.add('hidden'));
 controls.addEventListener('unlock', () => {
-  if (crash?.dead) return;
+  releaseKeys();
+  if (crash?.active) return; // no pause menu on top of the crash
   $('#overlay-title').textContent = 'Paused';
   $('#overlay-cta').textContent = 'Click to continue';
   overlay.classList.remove('hidden');
 });
 
 const keys = {};
+function releaseKeys() {
+  for (const k in keys) keys[k] = false;
+  vel?.set(0, 0);
+}
+window.addEventListener('blur', () => releaseKeys());
 window.addEventListener('keydown', (e) => {
   keys[e.code] = true;
   if (e.code === 'KeyE') tryPress();
@@ -82,7 +91,7 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('keyup', (e) => (keys[e.code] = false));
 window.addEventListener('mousedown', () => { if (controls.isLocked) tryPress(); });
 
-const vel = new THREE.Vector2(); // x = höger, y = framåt
+var vel = new THREE.Vector2(); // x = right, y = forward
 let bob = 0;
 
 function collide(p) {
@@ -122,7 +131,7 @@ function updatePlayer(dt) {
 // ---------- Knappen ----------
 const look = new THREE.Vector3(), toButton = new THREE.Vector3();
 function canPress() {
-  if (museum.button.pressed) return false;
+  if (museum.button.pressed || !controls.isLocked) return false;
   const bp = museum.button.worldPos;
   if (Math.hypot(camera.position.x - bp.x, camera.position.z - bp.z) > 2.6) return false;
   camera.getWorldDirection(look);

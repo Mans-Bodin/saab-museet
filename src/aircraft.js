@@ -212,7 +212,7 @@ export function buildDeltaFighter() {
 export function buildDoubleDeltaJet() {
   const alu = paint(0xb9bec4, 0.85, 0.28);
   return buildJet({
-    name: 'Double-Delta Interceptor', length: 15.2, radius: 0.8, height: 1.5, material: alu, intakes: false,
+    name: 'Double-Delta Interceptor', length: 15.2, radius: 0.8, height: 1.12, material: alu, intakes: false,
     wing: [[0.5, 3.4], [1.7, -1.0], [4.7, -5.0], [4.7, -5.8], [0.5, -6.9]],
     fin: [[-3.4, 0], [-6.8, 3.3], [-7.6, 3.3], [-7.5, 0]],
     roundel: [3.3, -4.6],
@@ -227,7 +227,7 @@ export function buildCanardJet() {
   const body = paint(0xffffff, 0.15, 0.6, { map: camo });
   const wing = paint(0xffffff, 0.15, 0.6, { map: camoWing });
   return buildJet({
-    name: 'Canard Attack Jet', length: 16.3, radius: 0.85, height: 1.6, material: body, wingMaterial: wing, intakes: true,
+    name: 'Canard Attack Jet', length: 16.3, radius: 0.85, height: 1.18, material: body, wingMaterial: wing, intakes: true,
     wing: [[0.6, -1.2], [3.1, -4.0], [5.3, -5.4], [5.3, -6.2], [0.6, -7.4]],
     canard: [[0.75, 3.6], [3.4, 1.2], [3.4, 0.5], [0.75, 0.4]],
     canardY: 0.45,

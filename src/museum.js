@@ -73,6 +73,7 @@ export function buildMuseum(scene) {
     for (const s of [-1, 1]) {
       const c = box(1.0, H, 1.0, wallMat, s * (W / 2 - 0.5), H / 2, z);
       c.castShadow = true;
+      colliders.push({ x: s * (W / 2 - 0.5), z, r: 0.72 }); // can't walk into the columns
     }
   }
 
