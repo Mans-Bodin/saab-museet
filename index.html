@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAAB-museet</title>
+<style>
+  :root { --y: #FFB838; --navy: #0d1f3a; --red: #ff3b3b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0e1014; color: #fff;
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #app canvas { display: block; }
+
+  #overlay { position: fixed; inset: 0; display: grid; place-items: center; cursor: pointer;
+    background: radial-gradient(ellipse at center, rgba(13,31,58,.72), rgba(5,8,14,.94)); transition: opacity .3s; }
+  #overlay.hidden { opacity: 0; pointer-events: none; }
+  .card { text-align: center; max-width: 560px; padding: 24px; }
+  .kicker { letter-spacing: .3em; font-size: 12px; text-transform: uppercase; color: var(--y); }
+  h1 { font-size: clamp(40px, 8vw, 72px); margin: 8px 0 4px; font-weight: 800; letter-spacing: .02em; }
+  .cta { display: inline-block; margin: 22px 0 18px; padding: 12px 26px; border-radius: 999px;
+    background: var(--y); color: #1a1a1a; font-weight: 700; }
+  .keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; color: #c4cbd6; font-size: 14px; }
+  kbd { display: inline-block; min-width: 26px; padding: 1px 7px; border-radius: 5px; border: 1px solid #5a6578;
+    border-bottom-width: 3px; background: #1a2230; color: #fff; font: 600 13px/1.6 inherit; text-align: center; }
+  #gpu { margin-top: 18px; font-size: 12px; color: #7d8899; }
+
+  #crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px;
+    border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 0 6px rgba(0,0,0,.6); pointer-events: none; }
+  #prompt { position: fixed; left: 50%; top: calc(50% + 36px); transform: translateX(-50%); pointer-events: none;
+    padding: 8px 14px; border-radius: 8px; background: rgba(0,0,0,.55); font-weight: 600; }
+  #prompt kbd { margin-right: 6px; }
+  #fps { position: fixed; right: 12px; top: 10px; font: 12px ui-monospace, monospace; color: rgba(255,255,255,.55); pointer-events: none; }
+
+  #alert { position: fixed; left: 0; right: 0; top: 14%; text-align: center; pointer-events: none;
+    font-weight: 900; font-size: clamp(18px, 3.4vw, 36px); letter-spacing: .04em; color: var(--red);
+    text-shadow: 0 0 18px rgba(255,0,0,.8), 0 2px 0 #000; }
+  #alert.on { color: #fff; }
+
+  #crash { position: fixed; inset: 0; background: #0b2a8a; color: #fff; padding: 8vh 8vw; overflow: auto;
+    font: 18px/1.55 ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; }
+  #crash .face { font-size: 96px; line-height: 1; margin-bottom: 24px; }
+  #crash h2 { font: 700 28px/1.3 system-ui, sans-serif; margin: 0 0 18px; max-width: 900px; }
+  #crash .trace { opacity: .85; margin: 18px 0; white-space: pre-wrap; }
+  #crash button { margin-top: 18px; font: 700 16px system-ui, sans-serif; padding: 12px 22px; border: 0; border-radius: 6px;
+    background: #fff; color: #0b2a8a; cursor: pointer; }
+  [hidden] { display: none !important; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "./lib/three.module.min.js",
+    "three/addons/": "./lib/addons/"
+} }
+</script>
+</head>
+<body>
+<div id="app"></div>
+
+<div id="crosshair"></div>
+<div id="prompt" hidden><kbd>E</kbd>Tryck på knappen</div>
+<div id="fps"></div>
+<div id="alert" hidden></div>
+
+<div id="overlay">
+  <div class="card">
+    <div class="kicker">Vibe Jam 2026 · Lag 8</div>
+    <h1 id="overlay-title">SAAB-museet</h1>
+    <div>Gå runt bland svenska stridsflygplan. Läs skyltarna. Rör inte den röda knappen.</div>
+    <div class="cta" id="overlay-cta">Klicka för att gå in</div>
+    <div class="keys">
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> gå</span>
+      <span><kbd>Mus</kbd> titta</span>
+      <span><kbd>Shift</kbd> spring</span>
+      <span><kbd>E</kbd> interagera</span>
+      <span><kbd>Esc</kbd> paus</span>
+    </div>
+    <div id="gpu"></div>
+  </div>
+</div>
+
+<div id="crash" hidden>
+  <div class="face">:(</div>
+  <h2>SAAB-museet stötte på ett problem och måste stängas. Någon tryckte på knappen. Det stod faktiskt TRYCK INTE.</h2>
+  <div>Felkod: <b>0xJAS39 — FÖR_MYCKET_DRAGKRAFT</b></div>
+  <div>Flygplan kvar i museet: 0 av 3 · Tak kvar: 0 %</div>
+  <div class="trace">  at Efterbrännkammare.tänd (motor.js:39)
+  at Gripen.lyft (hangar.js:1988)
+  at Viggen.vägbas (landsväg.js:1967)
+  at Draken.dubbeldelta (vinge.js:1955)
+  at Museum.tak (byggnad.js:404) — taket hittades inte
+  at Besökare.nyfikenhet (människa.js:∞)
+  at Knapp.tryck (DU)</div>
+  <div>WebGL-kontexten har förlorats. Grafikkortet låtsas att det aldrig har sett det här museet.</div>
+  <button id="restart">Starta om museet</button>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
