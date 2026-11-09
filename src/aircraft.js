@@ -128,7 +128,7 @@ export function buildJet(spec) {
   fin.position.y = R * 0.55;
   body.add(fin);
 
-  // Nationalitetsmärkning på vingarna
+  // Generic (fictional) insignia on the wings
   roundelTex ??= makeRoundelTexture();
   const roundelMat = new THREE.MeshStandardMaterial({
     map: roundelTex, transparent: true, roughness: 0.5, polygonOffset: true, polygonOffsetFactor: -2,
@@ -194,11 +194,11 @@ function paint(color, metalness, roughness, extra = {}) {
   return new THREE.MeshStandardMaterial({ color, metalness, roughness, envMapIntensity: 1.2, ...extra });
 }
 
-/** JAS 39 Gripen — deltavinge med canards. */
-export function buildGripen() {
+/** Delta-wing fighter with canards. */
+export function buildDeltaFighter() {
   const grey = paint(0x8b929b, 0.35, 0.42);
   return buildJet({
-    name: 'JAS 39 Gripen', length: 14.1, radius: 0.72, height: 1.55, material: grey, intakes: true,
+    name: 'Multirole Delta Fighter', length: 14.1, radius: 0.72, height: 1.55, material: grey, intakes: true,
     wing: [[0.5, 0.2], [4.2, -3.9], [4.2, -4.6], [0.5, -6.6]],
     canard: [[0.55, 3.7], [2.6, 2.35], [2.6, 1.85], [0.55, 1.75]],
     canardY: 0.12,
@@ -208,11 +208,11 @@ export function buildGripen() {
   });
 }
 
-/** J 35 Draken — dubbeldeltavinge, naturlig metall. */
-export function buildDraken() {
+/** Double-delta interceptor in bare metal. */
+export function buildDoubleDeltaJet() {
   const alu = paint(0xb9bec4, 0.85, 0.28);
   return buildJet({
-    name: 'J 35 Draken', length: 15.2, radius: 0.8, height: 1.5, material: alu, intakes: false,
+    name: 'Double-Delta Interceptor', length: 15.2, radius: 0.8, height: 1.5, material: alu, intakes: false,
     wing: [[0.5, 3.4], [1.7, -1.0], [4.7, -5.0], [4.7, -5.8], [0.5, -6.9]],
     fin: [[-3.4, 0], [-6.8, 3.3], [-7.6, 3.3], [-7.5, 0]],
     roundel: [3.3, -4.6],
@@ -220,14 +220,14 @@ export function buildDraken() {
   });
 }
 
-/** AJ 37 Viggen — stora canardvingar och fjällmönster. */
-export function buildViggen() {
+/** Attack jet with large canards and splinter camouflage. */
+export function buildCanardJet() {
   const camo = makeCamoTexture(1);
   const camoWing = makeCamoTexture(0.18);
   const body = paint(0xffffff, 0.15, 0.6, { map: camo });
   const wing = paint(0xffffff, 0.15, 0.6, { map: camoWing });
   return buildJet({
-    name: 'AJ 37 Viggen', length: 16.3, radius: 0.85, height: 1.6, material: body, wingMaterial: wing, intakes: true,
+    name: 'Canard Attack Jet', length: 16.3, radius: 0.85, height: 1.6, material: body, wingMaterial: wing, intakes: true,
     wing: [[0.6, -1.2], [3.1, -4.0], [5.3, -5.4], [5.3, -6.2], [0.6, -7.4]],
     canard: [[0.75, 3.6], [3.4, 1.2], [3.4, 0.5], [0.75, 0.4]],
     canardY: 0.45,

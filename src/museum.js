@@ -1,8 +1,8 @@
-// Själva museihallen: golv, väggar, ljus, utställningar och knappen.
+// The museum hall: floor, walls, lights, exhibits and the button.
 import * as THREE from 'three';
-import { buildDraken, buildGripen, buildViggen } from './aircraft.js';
+import { buildCanardJet, buildDeltaFighter, buildDoubleDeltaJet } from './aircraft.js';
 import {
-  makeBannerTexture, makeFloorTextures, makeHazardTexture, makePlaqueTexture, makeTimelineTexture,
+  makeFloorTextures, makeHazardTexture, makePlaqueTexture,
 } from './textures.js';
 
 export const HALL = { W: 40, D: 60, H: 11 };
@@ -157,68 +157,39 @@ export function buildMuseum(scene) {
     addPlaque(makePlaqueTexture(plaque), px, pz, plaqueAngle);
   }
 
-  addExhibit(buildDraken(), {
+  addExhibit(buildDoubleDeltaJet(), {
     x: -10, z: 8, rot: 0.55, radius: 8.2, plaqueAngle: 1.25,
     plaque: {
-      title: 'J 35 Draken', subtitle: 'Första flygning 1955',
-      body: 'Den karakteristiska dubbeldeltavingen gav både fart och manöverförmåga. Draken var ett av de första europeiska jaktplanen som klarade Mach 2.',
+      title: 'Double-Delta Interceptor', subtitle: 'Built to climb fast',
+      body: 'Its distinctive double-delta wing combined high top speed with good handling at low speed, letting it climb quickly and intercept from short notice.',
     },
   });
-  addExhibit(buildViggen(), {
-    x: 10, z: -5, rot: -0.7, radius: 8.8, plaqueAngle: -1.2,
+  addExhibit(buildCanardJet(), {
+    x: 9.5, z: -5, rot: -0.7, radius: 8.8, plaqueAngle: -1.2,
     plaque: {
-      title: 'AJ 37 Viggen', subtitle: 'Första flygning 1967',
-      body: 'Canardvingarna gav korta start- och landningssträckor, så Viggen kunde operera från vanliga landsvägar som krigsbaser.',
+      title: 'Canard Attack Jet', subtitle: 'Short take-off specialist',
+      body: 'Large canard foreplanes gave it very short take-off and landing runs, so it could operate from ordinary stretches of road.',
     },
   });
-  addExhibit(buildGripen(), {
-    x: 0, z: -20.5, rot: 0.25, radius: 7.8, plaqueAngle: 0.35, flying: { height: 2.6, bank: 0.42, pitch: -0.1 },
+  addExhibit(buildDeltaFighter(), {
+    x: 0, z: -20.5, rot: 0.25, radius: 7.8, plaqueAngle: -0.35, flying: { height: 2.6, bank: 0.42, pitch: -0.1 },
     plaque: {
-      title: 'JAS 39 Gripen', subtitle: 'Första flygning 1988',
-      body: 'Jakt, Attack och Spaning i ett och samma plan — därav namnet JAS. Lätt, smidig och byggd för att flyga från korta baser.',
+      title: 'Multirole Delta Fighter', subtitle: 'Fighter, attack, reconnaissance',
+      body: 'One aircraft for three roles. Small, agile and designed to fly from short runways. Shown here in flight.',
     },
   });
 
-  // ---------- Väggbanderoller och tidslinje ----------
-  const banner = new THREE.Mesh(
-    new THREE.PlaneGeometry(22, 5.5),
-    signMaterial(makeBannerTexture({ title: 'SAAB-MUSEET', subtitle: 'Svenskt flyg sedan 1937' }), 0.35),
-  );
-  banner.position.set(0, 7.0, -D / 2 + 0.03);
-  scene.add(banner);
-
-  const welcome = new THREE.Mesh(
-    new THREE.PlaneGeometry(14, 3.5),
-    signMaterial(makeBannerTexture({ title: 'VÄLKOMMEN', subtitle: 'Rör inte flygplanen. Eller knappen.' }), 0.35),
-  );
-  welcome.position.set(0, 7.2, D / 2 - 0.03);
-  welcome.rotation.y = Math.PI;
-  scene.add(welcome);
-
-  const timeline = [
-    ['1937', 'Svenska Aeroplan AB grundas i Trollhättan.'],
-    ['1955', 'J 35 Draken flyger för första gången.'],
-    ['1967', 'AJ 37 Viggen gör sin första flygning.'],
-    ['1988', 'JAS 39 Gripen lyfter för första gången.'],
-  ];
-  timeline.forEach(([year, text], i) => {
-    const plate = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4), signMaterial(makeTimelineTexture(year, text), 0.2));
-    plate.position.set(-W / 2 + 0.03, 4.0, 22 - i * 13);
-    plate.rotation.y = Math.PI / 2;
-    scene.add(plate);
-  });
-
-  // Nödutgångsskylt (kommer att behövas)
+  // Exit sign (it will be needed)
   const exitCanvas = document.createElement('canvas');
   exitCanvas.width = 512; exitCanvas.height = 192;
   const eg = exitCanvas.getContext('2d');
   eg.fillStyle = '#0b8a3e'; eg.fillRect(0, 0, 512, 192);
   eg.fillStyle = '#fff'; eg.font = '800 84px system-ui, sans-serif'; eg.textAlign = 'center';
-  eg.fillText('NÖDUTGÅNG', 256, 128);
+  eg.fillText('EXIT', 256, 128);
   const exitTex = new THREE.CanvasTexture(exitCanvas);
   exitTex.colorSpace = THREE.SRGBColorSpace;
   const exitSign = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.6), new THREE.MeshBasicMaterial({ map: exitTex, color: hdr(1.6, 1.6, 1.6) }));
-  exitSign.position.set(-W / 2 + 0.04, 3.6, -D / 2 + 6);
+  exitSign.position.set(-W / 2 + 0.04, 3.6, -20); // between the wall columns
   exitSign.rotation.y = Math.PI / 2;
   scene.add(exitSign);
 
@@ -269,8 +240,8 @@ export function buildMuseum(scene) {
   scene.add(station);
 
   const warnSign = addPlaque(makePlaqueTexture({
-    title: 'TRYCK INTE', subtitle: 'Gäller alla besökare',
-    body: 'Knappen är inte kopplad till någonting. Tryck inte på den ändå. Vi menar det. Seriöst.',
+    title: 'DO NOT PRESS', subtitle: 'Applies to all visitors',
+    body: 'This button is not connected to anything. Do not press it anyway. We mean it. Seriously.',
     accent: '#ff3b3b', danger: true,
   }), 13, 19.2, -Math.PI / 2 + 0.35);
   warnSign.scale.setScalar(0.85);

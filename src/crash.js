@@ -1,5 +1,5 @@
-// Vad som händer när någon trycker på knappen.
-// Faser: larm → tändning → alla flygplan lyfter genom taket → glitch → WebGL-kontexten dör på riktigt.
+// What happens when someone presses the button.
+// Phases: alarm → ignition → every aircraft lifts off through the roof → glitch → the game really shuts down.
 import * as THREE from 'three';
 
 const smooth = (a, b, t) => {
@@ -99,7 +99,7 @@ export class CrashSequence {
     if (this.active) return;
     this.active = true;
     this.museum.button.pressed = true;
-    try { this.audio.start(); } catch (e) { console.warn('Inget ljud:', e); }
+    try { this.audio.start(); } catch (e) { console.warn('No audio:', e); }
 
     this.museum.aircraft.forEach((a, i) => {
       a.rotation.order = 'YXZ'; // så att nosen tippar upp i planets egen riktning
@@ -116,11 +116,11 @@ export class CrashSequence {
 
   /** Visa varningstexter i HUD:en. */
   message(t) {
-    if (t < 1.2) return '⚠ OBEHÖRIG KNAPPTRYCKNING REGISTRERAD';
-    if (t < 2.4) return '⚠ EFTERBRÄNNKAMMARE TÄND I UTSTÄLLNINGSHALLEN';
-    if (t < 4.2) return '⚠ SAMTLIGA FLYGPLAN LÄMNAR MUSEET';
-    if (t < 5.4) return '⚠ TAKET ÄR INTE LÄNGRE ETT PROBLEM';
-    return '⚠ MUSEET.EXE SVARAR INTE';
+    if (t < 1.2) return '⚠ UNAUTHORIZED BUTTON PRESS DETECTED';
+    if (t < 2.4) return '⚠ AFTERBURNERS LIT INSIDE THE EXHIBITION HALL';
+    if (t < 4.2) return '⚠ ALL AIRCRAFT ARE LEAVING THE MUSEUM';
+    if (t < 5.4) return '⚠ THE ROOF IS NO LONGER A PROBLEM';
+    return '⚠ MUSEUM.EXE IS NOT RESPONDING';
   }
 
   update(dt) {
@@ -200,7 +200,7 @@ export class CrashSequence {
 
     this.onDead?.();
     setTimeout(() => {
-      throw new Error('SAAB-museet kraschade: FÖR_MYCKET_DRAGKRAFT (0xJAS39). Någon tryckte på knappen.');
+      throw new Error('The Flight Museum crashed: TOO_MUCH_THRUST (0xB00M). Someone pressed the button.');
     }, 0);
   }
 }

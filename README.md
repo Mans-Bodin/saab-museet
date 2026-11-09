@@ -1,39 +1,35 @@
-# team-8 — SAAB-museet
-Vibe Jam 2026 – lag 8
+# The Flight Museum
+Vibe Jam 2026 — Team 8
 
-Ett 3D-spel i webbläsaren: gå runt i första person i ett museum med svenska stridsflygplan
-(J 35 Draken, AJ 37 Viggen och JAS 39 Gripen). Allt renderas på grafikkortet med WebGL via
-[Three.js](https://threejs.org) — skuggor, ACES-tonmappning, reflektioner och bloom.
+A first-person browser game: walk around a museum hall full of jet fighters, read the plaques —
+and whatever you do, do not press the red button.
 
-Och ja: det finns en röd knapp. Tryck inte på den.
-
-## Kör lokalt
-ES-moduler kräver en webbserver (inte `file://`):
+## Run locally
+ES modules need a web server (not `file://`):
 
 ```sh
 python3 -m http.server 8000
-# öppna http://localhost:8000
+# open http://localhost:8000
 ```
 
-## Styrning
-| Tangent | |
+## Controls
+| Key | |
 |---|---|
-| W A S D / pilar | gå |
-| Mus | titta |
-| Shift | spring |
-| E / klick | interagera |
-| Esc | paus |
+| W A S D / arrows | move |
+| Mouse | look |
+| Shift | sprint |
+| E / click | interact |
+| Esc | pause |
 
-## Filer
-- `index.html` — sidan, HUD, startskärm och kraschskärm
-- `src/main.js` — renderare, efterbehandling, styrning, spelloop
-- `src/museum.js` — hallen, ljus, utställningar, knappen
-- `src/aircraft.js` — procedurella flygplansmodeller
-- `src/textures.js` — texturer ritade på canvas (golv, skyltar, kamouflage)
-- `src/crash.js` — vad som händer när någon trycker på knappen
-- `lib/` — Three.js r170 (MIT, se `lib/THREE-LICENSE`), lokalt så att sidan fungerar som statiska filer
+## Files
+- `index.html` — page, HUD, start screen and crash screen
+- `src/main.js` — renderer, controls, game loop
+- `src/museum.js` — the hall, lights, exhibits and the button
+- `src/aircraft.js` — procedural aircraft models
+- `src/textures.js` — textures drawn on canvas (floor, plaques, camouflage)
+- `src/crash.js` — what happens when someone presses the button
+- `lib/` — Three.js r170 (MIT, see `lib/THREE-LICENSE`), bundled so the site works as static files
 
-
-## Testläge
-`?view=x,y,z,lx,ly,lz` placerar kameran utan att låsa musen, och `&crash=sekunder` spolar fram kraschen —
-praktiskt för skärmdumpar.
+## Test mode
+`?view=x,y,z,lx,ly,lz` places the camera without locking the mouse, and `&crash=seconds`
+fast-forwards the crash — handy for screenshots.

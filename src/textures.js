@@ -1,4 +1,4 @@
-// Procedurella texturer ritade på <canvas> — inga bildfiler behövs.
+// Procedural textures drawn on <canvas> — no image files needed.
 import * as THREE from 'three';
 
 function rng(seed) {
@@ -113,46 +113,7 @@ export function makePlaqueTexture({ title, subtitle, body, accent = '#FFB838', d
   return toTexture(c, { wrap: false });
 }
 
-/** Stor vägg-banderoll. */
-export function makeBannerTexture({ title, subtitle, w = 2048, h = 512, accent = '#FFB838' }) {
-  const [c, g] = makeCanvas(w, h);
-  const grad = g.createLinearGradient(0, 0, w, h);
-  grad.addColorStop(0, '#0d1f3a');
-  grad.addColorStop(1, '#16335c');
-  g.fillStyle = grad;
-  g.fillRect(0, 0, w, h);
-  g.fillStyle = accent;
-  g.fillRect(0, h - 24, w, 24);
-  g.fillStyle = '#ffffff';
-  g.textAlign = 'center';
-  g.font = `800 ${Math.round(h * 0.38)}px ${FONT}`;
-  g.fillText(title, w / 2, h * 0.52);
-  if (subtitle) {
-    g.fillStyle = '#c9d6ea';
-    g.font = `500 ${Math.round(h * 0.11)}px ${FONT}`;
-    g.fillText(subtitle, w / 2, h * 0.78);
-  }
-  return toTexture(c, { wrap: false });
-}
-
-/** Årtals-skylt för tidslinjen på väggarna. */
-export function makeTimelineTexture(year, text) {
-  const W = 1024, H = 1024;
-  const [c, g] = makeCanvas(W, H);
-  g.fillStyle = '#f4f1ea';
-  g.fillRect(0, 0, W, H);
-  g.fillStyle = '#16335c';
-  g.fillRect(0, 0, W, 330);
-  g.fillStyle = '#FFB838';
-  g.font = `800 220px ${FONT}`;
-  g.fillText(year, 70, 250);
-  g.fillStyle = '#1d2430';
-  g.font = `500 64px ${FONT}`;
-  wrapText(g, text, 70, 470, W - 140, 86);
-  return toTexture(c, { wrap: false });
-}
-
-/** Svenskt splittermönster ("fjällmönster") för Viggen. */
+/** Splinter camouflage pattern. */
 export function makeCamoTexture(repeat = 1) {
   const S = 512;
   const [c, g] = makeCanvas(S, S);
@@ -179,30 +140,14 @@ export function makeCamoTexture(repeat = 1) {
   return toTexture(c, { repeat: [repeat, repeat] });
 }
 
-/** Svensk nationalitetsmärkning: blå cirkel med tre gula kronor (förenklad). */
+/** Fictional wing insignia: concentric rings. */
 export function makeRoundelTexture() {
   const S = 256;
   const [c, g] = makeCanvas(S, S);
-  g.fillStyle = '#ffe36a';
-  g.beginPath(); g.arc(S / 2, S / 2, S / 2 - 2, 0, Math.PI * 2); g.fill();
-  g.fillStyle = '#1f5fae';
-  g.beginPath(); g.arc(S / 2, S / 2, S / 2 - 12, 0, Math.PI * 2); g.fill();
-  g.fillStyle = '#ffd23a';
-  const crown = (x, y, s) => {
-    g.beginPath();
-    g.moveTo(x - s, y + s * 0.6);
-    g.lineTo(x - s, y - s * 0.4);
-    g.lineTo(x - s * 0.5, y);
-    g.lineTo(x, y - s * 0.7);
-    g.lineTo(x + s * 0.5, y);
-    g.lineTo(x + s, y - s * 0.4);
-    g.lineTo(x + s, y + s * 0.6);
-    g.closePath();
-    g.fill();
-  };
-  crown(S * 0.5, S * 0.33, 26);
-  crown(S * 0.33, S * 0.63, 26);
-  crown(S * 0.67, S * 0.63, 26);
+  [[S / 2 - 2, '#f2f2f2'], [S / 2 - 18, '#20324f'], [S / 2 - 52, '#f2f2f2'], [S / 2 - 70, '#c8a23a']].forEach(([r, col]) => {
+    g.fillStyle = col;
+    g.beginPath(); g.arc(S / 2, S / 2, r, 0, Math.PI * 2); g.fill();
+  });
   return toTexture(c, { wrap: false });
 }
 

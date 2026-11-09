@@ -1,4 +1,4 @@
-// SAAB-museet — ett förstapersonsspel i webbläsaren (Three.js / WebGL).
+// The Flight Museum — a first-person browser game (Three.js).
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/PointerLockControls.js';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
@@ -50,14 +50,6 @@ window.addEventListener('resize', () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Visa vilket grafikkort som renderar, om webbläsaren berättar det
-try {
-  const gl = renderer.getContext();
-  const info = gl.getExtension('WEBGL_debug_renderer_info');
-  const gpu = info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : null;
-  if (gpu) $('#gpu').textContent = `Renderas på: ${gpu}`;
-} catch { /* spelar ingen roll */ }
-
 // ---------- HUD ----------
 const hud = {
   setAlert(text, on) {
@@ -77,8 +69,8 @@ overlay.addEventListener('click', () => controls.lock());
 controls.addEventListener('lock', () => overlay.classList.add('hidden'));
 controls.addEventListener('unlock', () => {
   if (crash?.dead) return;
-  $('#overlay-title').textContent = 'Pausat';
-  $('#overlay-cta').textContent = 'Klicka för att fortsätta';
+  $('#overlay-title').textContent = 'Paused';
+  $('#overlay-cta').textContent = 'Click to continue';
   overlay.classList.remove('hidden');
 });
 
@@ -156,7 +148,6 @@ $('#restart').addEventListener('click', () => location.reload());
 
 // ---------- Spelloopen ----------
 const clock = new THREE.Clock();
-let frames = 0, fpsTime = 0;
 const demo = params.has('view'); // för skärmdumpar/test: ?view=x,y,z,lx,ly,lz
 
 function tick() {
@@ -172,14 +163,6 @@ function tick() {
   camera.position.add(crash.shake);
   composer.render();
   camera.position.sub(crash.shake);
-
-  frames++;
-  fpsTime += dt;
-  if (fpsTime > 0.5) {
-    $('#fps').textContent = `${Math.round(frames / fpsTime)} fps`;
-    frames = 0;
-    fpsTime = 0;
-  }
 }
 
 if (demo) {

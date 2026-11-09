@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SAAB-museet</title>
+<title>The Flight Museum</title>
 <style>
   :root { --y: #FFB838; --navy: #0d1f3a; --red: #ff3b3b; }
   * { box-sizing: border-box; }
@@ -22,14 +22,12 @@
   .keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; color: #c4cbd6; font-size: 14px; }
   kbd { display: inline-block; min-width: 26px; padding: 1px 7px; border-radius: 5px; border: 1px solid #5a6578;
     border-bottom-width: 3px; background: #1a2230; color: #fff; font: 600 13px/1.6 inherit; text-align: center; }
-  #gpu { margin-top: 18px; font-size: 12px; color: #7d8899; }
 
   #crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px;
     border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 0 6px rgba(0,0,0,.6); pointer-events: none; }
   #prompt { position: fixed; left: 50%; top: calc(50% + 36px); transform: translateX(-50%); pointer-events: none;
     padding: 8px 14px; border-radius: 8px; background: rgba(0,0,0,.55); font-weight: 600; }
   #prompt kbd { margin-right: 6px; }
-  #fps { position: fixed; right: 12px; top: 10px; font: 12px ui-monospace, monospace; color: rgba(255,255,255,.55); pointer-events: none; }
 
   #alert { position: fixed; left: 0; right: 0; top: 14%; text-align: center; pointer-events: none;
     font-weight: 900; font-size: clamp(18px, 3.4vw, 36px); letter-spacing: .04em; color: var(--red);
@@ -56,41 +54,38 @@
 <div id="app"></div>
 
 <div id="crosshair"></div>
-<div id="prompt" hidden><kbd>E</kbd>Tryck på knappen</div>
-<div id="fps"></div>
+<div id="prompt" hidden><kbd>E</kbd>Press the button</div>
 <div id="alert" hidden></div>
 
 <div id="overlay">
   <div class="card">
-    <div class="kicker">Vibe Jam 2026 · Lag 8</div>
-    <h1 id="overlay-title">SAAB-museet</h1>
-    <div>Gå runt bland svenska stridsflygplan. Läs skyltarna. Rör inte den röda knappen.</div>
-    <div class="cta" id="overlay-cta">Klicka för att gå in</div>
+    <div class="kicker">Vibe Jam 2026 · Team 8</div>
+    <h1 id="overlay-title">The Flight Museum</h1>
+    <div>Walk among jet fighters. Read the plaques. Do not touch the red button.</div>
+    <div class="cta" id="overlay-cta">Click to enter</div>
     <div class="keys">
-      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> gå</span>
-      <span><kbd>Mus</kbd> titta</span>
-      <span><kbd>Shift</kbd> spring</span>
-      <span><kbd>E</kbd> interagera</span>
-      <span><kbd>Esc</kbd> paus</span>
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span>
+      <span><kbd>Mouse</kbd> look</span>
+      <span><kbd>Shift</kbd> sprint</span>
+      <span><kbd>E</kbd> interact</span>
+      <span><kbd>Esc</kbd> pause</span>
     </div>
-    <div id="gpu"></div>
   </div>
 </div>
 
 <div id="crash" hidden>
   <div class="face">:(</div>
-  <h2>SAAB-museet stötte på ett problem och måste stängas. Någon tryckte på knappen. Det stod faktiskt TRYCK INTE.</h2>
-  <div>Felkod: <b>0xJAS39 — FÖR_MYCKET_DRAGKRAFT</b></div>
-  <div>Flygplan kvar i museet: 0 av 3 · Tak kvar: 0 %</div>
-  <div class="trace">  at Efterbrännkammare.tänd (motor.js:39)
-  at Gripen.lyft (hangar.js:1988)
-  at Viggen.vägbas (landsväg.js:1967)
-  at Draken.dubbeldelta (vinge.js:1955)
-  at Museum.tak (byggnad.js:404) — taket hittades inte
-  at Besökare.nyfikenhet (människa.js:∞)
-  at Knapp.tryck (DU)</div>
-  <div>WebGL-kontexten har förlorats. Grafikkortet låtsas att det aldrig har sett det här museet.</div>
-  <button id="restart">Starta om museet</button>
+  <h2>The Flight Museum ran into a problem and needs to close. Someone pressed the button. It literally said DO NOT PRESS.</h2>
+  <div>Error code: <b>0xB00M — TOO_MUCH_THRUST</b></div>
+  <div>Aircraft left in the museum: 0 of 3 · Roof remaining: 0%</div>
+  <div class="trace">  at Afterburner.ignite (engine.js:404)
+  at DeltaFighter.liftOff (hangar.js:12)
+  at CanardJet.shortTakeoff (runway.js:88)
+  at DoubleDelta.whoosh (wing.js:2)
+  at Museum.roof (building.js:404) — roof not found
+  at Visitor.curiosity (human.js:∞)
+  at Button.press (YOU)</div>
+  <button id="restart">Restart the museum</button>
 </div>
 
 <script type="module" src="./src/main.js"></script>
